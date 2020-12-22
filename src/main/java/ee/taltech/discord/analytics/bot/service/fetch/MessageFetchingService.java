@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ public class MessageFetchingService {
 		List<Message> messages;
 
 		if (channelEntity.getLatestMessageID() == null) {
-			messages = channel.getHistoryFromBeginning(10000).complete().getRetrievedHistory();
+			messages = channel.getHistoryFromBeginning(100).complete().getRetrievedHistory();
 		} else {
-			messages = channel.getHistoryAfter(channelEntity.getLatestMessageID(), 10000).complete().getRetrievedHistory();
+			messages = channel.getHistoryAfter(channelEntity.getLatestMessageID(), 100).complete().getRetrievedHistory();
 		}
 
 		return messages.stream().map(MessageEntity::from).collect(Collectors.toList());

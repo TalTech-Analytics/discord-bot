@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationProperties {
 
 	private String token;
+	private Integer maxConcurrentApiRequests = 10;
 
 	@Bean
 	@Scope("prototype")
