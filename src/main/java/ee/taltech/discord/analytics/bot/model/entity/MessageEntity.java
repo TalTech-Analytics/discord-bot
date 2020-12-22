@@ -39,6 +39,8 @@ public class MessageEntity {
 	@Column(columnDefinition = "TEXT")
 	private String content;
 
+	private Valence valence;
+
 
 	public static MessageEntity from(Message x) {
 		return MessageEntity.builder()

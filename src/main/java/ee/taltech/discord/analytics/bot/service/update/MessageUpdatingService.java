@@ -70,11 +70,10 @@ public class MessageUpdatingService {
 		logger.info("Processing channel: " + channel.getCategory() + "/" + channel.getName());
 		List<MessageEntity> messages = channelFetchingService.getNewerMessages(channel);
 		while (messages.size() > 0) {
-			messages.forEach(message -> {
-				messageRepository.save(message);
-				channel.setLatestMessageID(message.getId());
-			});
+			String latest = messages.get(messages.size() - 1).getId();
+			channel.setLatestMessageID(latest);
 			channelRepository.save(channel);
+			messageRepository.saveAll(messages);
 			messages = channelFetchingService.getNewerMessages(channel);
 		}
 	}
