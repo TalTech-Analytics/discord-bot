@@ -29,6 +29,7 @@ public class ApplicationProperties {
 
 	private String token;
 	private Integer maxConcurrentApiRequests = 10;
+	private Boolean databaseLocked = false;
 
 	@Bean
 	@Scope("prototype")

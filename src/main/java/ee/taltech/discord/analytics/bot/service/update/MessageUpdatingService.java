@@ -20,16 +20,14 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
-@EnableAsync
-@EnableScheduling
 @RequiredArgsConstructor
 public class MessageUpdatingService {
 
+	private final ApplicationProperties applicationProperties;
 	private final MessageFetchingService channelFetchingService;
 	private final MessageRepository messageRepository;
 	private final ChannelRepository channelRepository;
 	private final Logger logger;
-	private final ApplicationProperties applicationProperties;
 
 	private static final ConcurrentLinkedQueue<ChannelEntity> channelQueue = new ConcurrentLinkedQueue<>();
 	private static Integer threadsRemaining = -1;
@@ -38,12 +36,17 @@ public class MessageUpdatingService {
 		return messageRepository.findAll(PageRequest.of(page, pageSize));
 	}
 
+	@Async
+	@Scheduled(cron = "0 0 4 * * *") // 4 am
 	public void updateChannelMessages() {
 		if (threadsRemaining < 0) {
 			threadsRemaining = applicationProperties.getMaxConcurrentApiRequests();
 		}
 
-		if (channelQueue.isEmpty() && threadsRemaining.equals(applicationProperties.getMaxConcurrentApiRequests())) {
+		if (!applicationProperties.getDatabaseLocked() &&
+				channelQueue.isEmpty() &&
+				threadsRemaining.equals(applicationProperties.getMaxConcurrentApiRequests())) {
+			applicationProperties.setDatabaseLocked(true);
 			channelQueue.addAll(channelRepository.findAll());
 		}
 	}
@@ -57,6 +60,8 @@ public class MessageUpdatingService {
 				ChannelEntity channel = channelQueue.poll();
 				if (channel != null) {
 					updateMessages(channel);
+				} else {
+					applicationProperties.setDatabaseLocked(false);
 				}
 			} catch (Exception e) {
 				logger.warn("Fetching API failed with message: {}", e.getMessage());

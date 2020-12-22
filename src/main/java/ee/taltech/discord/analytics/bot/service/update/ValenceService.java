@@ -1,5 +1,6 @@
 package ee.taltech.discord.analytics.bot.service.update;
 
+import ee.taltech.discord.analytics.bot.configuration.ApplicationProperties;
 import ee.taltech.discord.analytics.bot.model.dto.MessageContainerDTO;
 import ee.taltech.discord.analytics.bot.model.dto.MessageDTO;
 import ee.taltech.discord.analytics.bot.model.entity.MessageEntity;
@@ -19,24 +20,21 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Service
-@EnableAsync
-@EnableScheduling
 @RequiredArgsConstructor
 public class ValenceService {
 
+	private final ApplicationProperties properties;
 	private final DockerRunningService dockerRunningService;
 	private final MessageRepository messageRepository;
 	private final Logger logger;
 
-	private static Boolean inProgress = false;
-
 	@Async
-	@Scheduled(fixedRate = 60000)
+	@Scheduled(cron = "0 0 */1 * * *") // every hour
 	public void tagValence() {
-		if (inProgress) {
+		if (properties.getDatabaseLocked()) {
 			return;
 		}
-		inProgress = true;
+		properties.setDatabaseLocked(true);
 
 		try {
 			runDocker();
@@ -44,8 +42,9 @@ public class ValenceService {
 			logger.error("Running valence container resulted in an error: {}", e.getMessage());
 		}
 
-		logger.error("Finished running valence tagger");
-		inProgress = false;
+		logger.info("Finished running valence tagger");
+		properties.setDatabaseLocked(false);
+
 	}
 
 	private void runDocker() {
