@@ -8,11 +8,9 @@ import ee.taltech.discord.analytics.bot.model.entity.Valence;
 import ee.taltech.discord.analytics.bot.repository.MessageRepository;
 import ee.taltech.discord.analytics.bot.service.docker.DockerRunningService;
 import ee.taltech.discord.analytics.bot.service.docker.ValenceDocker;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ValenceService {
 
 	private final ApplicationProperties properties;

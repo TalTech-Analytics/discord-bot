@@ -1,5 +1,6 @@
 package ee.taltech.discord.analytics.bot.service.docker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallbackTemplate;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -11,6 +12,7 @@ import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
 import ee.taltech.discord.analytics.bot.exception.DockerTimeoutException;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +21,19 @@ import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Docker {
-	protected final Logger LOGGER = LoggerFactory.getLogger(ValenceDocker.class);
+	protected final ObjectMapper mapper = new ObjectMapper();
+	protected final Logger LOGGER = LoggerFactory.getLogger(Docker.class);
 	protected DockerClient dockerClient;
-	protected CreateContainerResponse container;
-	protected String containerName;
+	private CreateContainerResponse container;
+	protected String tmpFolder = null;
 	private boolean done = false;
 
+	abstract void run();
+
 	@SneakyThrows
-	void run() {
+	void run(CreateContainerResponse container, String containerName) {
+		this.container = container;
+
 		LOGGER.info("Created container with name: {}, id: {}", containerName, container.getId());
 
 		dockerClient.startContainerCmd(container.getId()).exec();
@@ -56,7 +63,7 @@ public abstract class Docker {
 					}
 				});
 
-		int seconds = 3600;
+		int seconds = 12000;
 		while (!done) {
 			TimeUnit.SECONDS.sleep(1);
 			seconds--;
@@ -67,6 +74,14 @@ public abstract class Docker {
 	}
 
 	void cleanup() {
+//		if (tmpFolder != null) {
+//			try {
+//				FileUtils.deleteDirectory(new File(tmpFolder));
+//			} catch (Exception e) {
+//				LOGGER.warn("Failed deleting tmp folder:" + tmpFolder);
+//			}
+//		}
+
 		if (dockerClient != null && container != null) {
 
 			try {
@@ -117,7 +132,8 @@ public abstract class Docker {
 				.build();
 	}
 
-	protected String getImage(DockerClient dockerClient, String image) {
+	protected String getImage(String image) {
+		fetchClient();
 		ImageCheck imageCheck = new ImageCheck(dockerClient, image);
 		return imageCheck.invoke();
 	}

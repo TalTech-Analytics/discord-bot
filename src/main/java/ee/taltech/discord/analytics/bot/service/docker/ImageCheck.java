@@ -46,6 +46,6 @@ public class ImageCheck {
 		LOGGER.info("Pulling new image: {}", image);
 		dockerClient.pullImageCmd(image)
 				.exec(new PullImageResultCallback())
-				.awaitCompletion(300, TimeUnit.SECONDS);
+				.awaitCompletion(3600, TimeUnit.SECONDS);
 	}
 }
