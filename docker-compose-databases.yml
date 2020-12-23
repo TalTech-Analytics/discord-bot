@@ -13,9 +13,10 @@ services:
         ports:
             - "5433:5432"
 
-    arete:
+    adminer:
         container_name: adminer
-        image: adminer
+        image: adminer:standalone
+        entrypoint: [ "php", "-S", "0.0.0.0:8080", "-t", "/var/www/html" ]
         restart: unless-stopped
         ports:
             - "8190:8080"

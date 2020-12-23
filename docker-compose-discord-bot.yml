@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+
+    discord_bot:
+        container_name: discord_bot
+        image: taltechanalytics/discord-bot:latest
+        environment:
+            DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+            DATABASE_PASSWORD: ${DATABASE_PASSWORD:-v1jXKUpcHAm0dc3C2GNlFkjibEwzdkTbG0Vnld5RZ16Nriz86hQ0cQ2dC09lpVjg}
+        ports:
+            - 8070:8070
