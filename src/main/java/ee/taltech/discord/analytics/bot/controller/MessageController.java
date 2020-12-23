@@ -9,21 +9,21 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("api/v2")
+@RequestMapping("api/v2/messages")
 @AllArgsConstructor
 public class MessageController {
 
 	private final MessageUpdatingService messageUpdatingService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@GetMapping(path = "/messages", produces = MediaType.APPLICATION_JSON_VALUE, params = {"page", "size"})
+	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, params = {"page", "size"})
 	public Page<MessageEntity> getGuilds(@RequestParam("page") int page, @RequestParam("size") int size) {
 		return messageUpdatingService.getMessages(page, size);
 	}
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PutMapping(path = "/messages", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void updateGuilds() {
+	@PutMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+	public void updateMessages() {
 		messageUpdatingService.updateChannelMessages();
 	}
 }

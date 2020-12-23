@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("api/v2/cron")
+@RequestMapping("api/v2/")
 @AllArgsConstructor
 public class CronController {
 
 	private final CronService cronService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PostMapping(path = ":run", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "cron:run", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void runCronTasks() {
 		cronService.run();
 	}

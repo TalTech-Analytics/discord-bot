@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("api/v2/aggregator")
+@RequestMapping("api/v2/")
 @AllArgsConstructor
 public class AggregationController {
 
 	private final AggregationService aggregationService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PostMapping(path = ":run", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "aggregator:run", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void aggregateData() {
 		aggregationService.aggregate();
 	}

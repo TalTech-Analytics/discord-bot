@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("api/v2/valence")
+@RequestMapping("api/v2/")
 @AllArgsConstructor
 public class ValenceController {
 
 	private final ValenceService valenceService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PostMapping(path = ":run", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "valence:run", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void tagMessages() {
 		valenceService.tagValence();
 	}
