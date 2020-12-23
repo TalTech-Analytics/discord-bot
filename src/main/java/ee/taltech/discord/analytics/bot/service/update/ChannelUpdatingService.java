@@ -6,9 +6,6 @@ import ee.taltech.discord.analytics.bot.service.fetch.ChannelFetchingService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +22,6 @@ public class ChannelUpdatingService {
 		return channelRepository.findAll();
 	}
 
-	@Async
-	@Scheduled(cron = "0 0 3 * * *") // 3 am
 	public void updateChannels() {
 		List<ChannelEntity> existingChannels = channelRepository.findAll();
 		List<ChannelEntity> newChannels = channelFetchingService.getChannels();

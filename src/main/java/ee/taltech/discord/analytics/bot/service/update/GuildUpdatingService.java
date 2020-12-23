@@ -6,8 +6,6 @@ import ee.taltech.discord.analytics.bot.service.fetch.GuildFetchingService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +24,6 @@ public class GuildUpdatingService {
 		return guildRepository.findAll();
 	}
 
-	@Async
-	@Scheduled(cron = "0 0 2 * * *") // 2 am
 	public void updateGuilds() {
 		List<GuildEntity> existingGuilds = guildRepository.findAll();
 		List<GuildEntity> newGuilds = guildFetchingService.getGuilds();

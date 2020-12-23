@@ -28,8 +28,6 @@ import org.springframework.stereotype.Component;
 public class ApplicationProperties {
 
 	private String token;
-	private Integer maxConcurrentApiRequests = 10;
-	private Boolean databaseLocked = false;
 
 	@Bean
 	@Scope("prototype")
@@ -46,7 +44,7 @@ public class ApplicationProperties {
 		builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
 		builder.setBulkDeleteSplittingEnabled(false);
 		builder.setCompression(Compression.NONE);
-		builder.setActivity(Activity.watching("TV"));
+		builder.setActivity(Activity.playing("with your data"));
 		return builder.build();
 	}
 }

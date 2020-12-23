@@ -1,6 +1,5 @@
 package ee.taltech.discord.analytics.bot.service.update;
 
-import ee.taltech.discord.analytics.bot.configuration.ApplicationProperties;
 import ee.taltech.discord.analytics.bot.model.dto.MessageContainerDTO;
 import ee.taltech.discord.analytics.bot.model.dto.MessageDTO;
 import ee.taltech.discord.analytics.bot.model.entity.MessageEntity;
@@ -10,8 +9,6 @@ import ee.taltech.discord.analytics.bot.service.docker.DockerRunningService;
 import ee.taltech.discord.analytics.bot.service.docker.ValenceDocker;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -21,19 +18,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ValenceService {
 
-	private final ApplicationProperties properties;
 	private final DockerRunningService dockerRunningService;
 	private final MessageRepository messageRepository;
 	private final Logger logger;
 
-	@Async
-	@Scheduled(cron = "0 0 */1 * * *") // every hour
 	public void tagValence() {
-		if (properties.getDatabaseLocked()) {
-			return;
-		}
-		properties.setDatabaseLocked(true);
-
 		try {
 			runDocker();
 		} catch (Exception e) {
@@ -41,8 +30,6 @@ public class ValenceService {
 		}
 
 		logger.info("Finished running valence tagger");
-		properties.setDatabaseLocked(false);
-
 	}
 
 	private void runDocker() {

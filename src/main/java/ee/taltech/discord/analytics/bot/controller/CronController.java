@@ -1,6 +1,6 @@
 package ee.taltech.discord.analytics.bot.controller;
 
-import ee.taltech.discord.analytics.bot.service.update.ValenceService;
+import ee.taltech.discord.analytics.bot.service.update.CronService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("api/v2/valence")
+@RequestMapping("api/v2/cron")
 @AllArgsConstructor
-public class ValenceController {
+public class CronController {
 
-	private final ValenceService valenceService;
+	private final CronService cronService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PostMapping(path = ":run", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void tagMessages() {
-		valenceService.tagValence();
+	public void runCronTasks() {
+		cronService.run();
 	}
 }
