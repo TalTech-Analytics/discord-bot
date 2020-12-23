@@ -1,5 +1,7 @@
 package ee.taltech.discord.analytics.bot.controller;
 
+import ee.taltech.discord.analytics.bot.configuration.ApplicationProperties;
+import ee.taltech.discord.analytics.bot.exception.LockedResourceException;
 import ee.taltech.discord.analytics.bot.model.entity.GuildEntity;
 import ee.taltech.discord.analytics.bot.service.update.GuildUpdatingService;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GuildController {
 
+	private final ApplicationProperties applicationProperties;
 	private final GuildUpdatingService guildUpdatingService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
@@ -24,8 +27,12 @@ public class GuildController {
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<GuildEntity> updateGuilds() {
-		guildUpdatingService.updateGuilds();
-		return guildUpdatingService.getGuilds();
+	public List<GuildEntity> updateGuilds() throws LockedResourceException {
+		if (!applicationProperties.getInProgress()) {
+			guildUpdatingService.updateGuilds();
+			return guildUpdatingService.getGuilds();
+		} else {
+			throw new LockedResourceException();
+		}
 	}
 }

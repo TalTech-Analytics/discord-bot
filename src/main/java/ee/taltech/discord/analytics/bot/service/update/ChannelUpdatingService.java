@@ -5,7 +5,6 @@ import ee.taltech.discord.analytics.bot.repository.ChannelRepository;
 import ee.taltech.discord.analytics.bot.service.fetch.ChannelFetchingService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,9 +1,9 @@
 package ee.taltech.discord.analytics.bot.controller;
 
+import ee.taltech.discord.analytics.bot.configuration.ApplicationProperties;
+import ee.taltech.discord.analytics.bot.exception.LockedResourceException;
 import ee.taltech.discord.analytics.bot.model.entity.ChannelEntity;
-import ee.taltech.discord.analytics.bot.model.entity.GuildEntity;
 import ee.taltech.discord.analytics.bot.service.update.ChannelUpdatingService;
-import ee.taltech.discord.analytics.bot.service.update.GuildUpdatingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ChannelController {
 
+	private final ApplicationProperties applicationProperties;
 	private final ChannelUpdatingService channelUpdatingService;
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
@@ -27,8 +28,12 @@ public class ChannelController {
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@PutMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<ChannelEntity> updateChannels() {
-		channelUpdatingService.updateChannels();
-		return channelUpdatingService.getChannels();
+	public List<ChannelEntity> updateChannels() throws LockedResourceException {
+		if (!applicationProperties.getInProgress()) {
+			channelUpdatingService.updateChannels();
+			return channelUpdatingService.getChannels();
+		} else {
+			throw new LockedResourceException();
+		}
 	}
 }

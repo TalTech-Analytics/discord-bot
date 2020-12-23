@@ -5,8 +5,6 @@ import ee.taltech.discord.analytics.bot.repository.GuildRepository;
 import ee.taltech.discord.analytics.bot.service.fetch.GuildFetchingService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

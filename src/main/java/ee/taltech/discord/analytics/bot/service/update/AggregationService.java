@@ -24,7 +24,6 @@ public class AggregationService {
 	private final Logger logger;
 
 	@Async
-//	@Scheduled(cron = "0 0 0 */1 * *") // every day
 	public void aggregate() {
 		try {
 			runDocker();
