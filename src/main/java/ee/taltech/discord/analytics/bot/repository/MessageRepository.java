@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
 
-	List<MessageEntity> findTop100000ByValenceNull();
+	List<MessageEntity> findAllByValenceNull();
 
 }

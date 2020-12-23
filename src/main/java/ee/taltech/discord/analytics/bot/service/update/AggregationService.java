@@ -1,9 +1,6 @@
 package ee.taltech.discord.analytics.bot.service.update;
 
-import ee.taltech.discord.analytics.bot.model.dto.ChannelContainerDTO;
-import ee.taltech.discord.analytics.bot.model.dto.GuildContainerDTO;
-import ee.taltech.discord.analytics.bot.model.dto.MessageContainerDTO;
-import ee.taltech.discord.analytics.bot.model.dto.MessageDTO;
+import ee.taltech.discord.analytics.bot.model.dto.*;
 import ee.taltech.discord.analytics.bot.repository.ChannelRepository;
 import ee.taltech.discord.analytics.bot.repository.GuildRepository;
 import ee.taltech.discord.analytics.bot.repository.MessageRepository;
@@ -12,7 +9,6 @@ import ee.taltech.discord.analytics.bot.service.docker.DockerRunningService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -41,8 +37,10 @@ public class AggregationService {
 
 	private void runDocker() {
 		dockerRunningService.runDocker(AggregatorDocker.builder()
-				.guilds(new GuildContainerDTO(guildRepository.findAll()))
-				.channels(new ChannelContainerDTO(channelRepository.findAll()))
+				.guilds(new GuildContainerDTO(guildRepository.findAll()
+						.stream().map(GuildDTO::from).collect(Collectors.toList())))
+				.channels(new ChannelContainerDTO(channelRepository.findAll()
+						.stream().map(ChannelDTO::from).collect(Collectors.toList())))
 				.messages(new MessageContainerDTO(messageRepository.findAll()
 						.stream().map(MessageDTO::from).collect(Collectors.toList())))
 				.build());

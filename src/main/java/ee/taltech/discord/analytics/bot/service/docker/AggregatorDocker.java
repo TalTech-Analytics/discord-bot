@@ -4,11 +4,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.github.dockerjava.api.model.Volume;
-import ee.taltech.discord.analytics.bot.model.dto.ChannelContainerDTO;
-import ee.taltech.discord.analytics.bot.model.dto.GuildContainerDTO;
-import ee.taltech.discord.analytics.bot.model.dto.MessageContainerDTO;
-import ee.taltech.discord.analytics.bot.model.entity.ChannelEntity;
-import ee.taltech.discord.analytics.bot.model.entity.GuildEntity;
+import ee.taltech.discord.analytics.bot.model.dto.*;
 import lombok.Builder;
 import lombok.SneakyThrows;
 
@@ -70,14 +66,14 @@ public class AggregatorDocker extends Docker {
 	private void createDiscordTree(String inputFolder) {
 		mapper.writeValue(new File(inputFolder + "/guilds.json"), guilds);
 
-		for (GuildEntity guild : guilds.getGuilds()) {
+		for (GuildDTO guild : guilds.getGuilds()) {
 			String guildFolder = inputFolder + "/" + guild.getId();
 			ensureFoldersExist(new File(guildFolder));
 			ChannelContainerDTO guildChannels = new ChannelContainerDTO(channels.getChannels()
 					.stream().filter(x -> x.getGuildID().equals(guild.getId())).collect(Collectors.toList()));
 			mapper.writeValue(new File(guildFolder + "/channels.json"), guildChannels);
 
-			for (ChannelEntity channel : channels.getChannels()) {
+			for (ChannelDTO channel : channels.getChannels()) {
 				String channelFolder = guildFolder + "/" + channel.getId();
 				ensureFoldersExist(new File(channelFolder));
 				MessageContainerDTO channelMessages = new MessageContainerDTO(messages.getMessages()

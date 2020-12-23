@@ -48,7 +48,7 @@ public class ValenceService {
 	private void runDocker() {
 		HashMap<String, MessageEntity> entities = new HashMap<>();
 
-		MessageContainerDTO container = new MessageContainerDTO(messageRepository.findTop100000ByValenceNull().stream()
+		MessageContainerDTO container = new MessageContainerDTO(messageRepository.findAllByValenceNull().stream()
 				.peek(x -> entities.put(x.getId(), x))
 				.map(MessageDTO::from).collect(Collectors.toList()));
 

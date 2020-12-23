@@ -27,6 +27,7 @@ public class MessageDTO {
 				.channelID(x.getChannelID())
 				.guildID(x.getGuildID())
 				.content(x.getContent())
+				.valence(x.getValence().toValue())
 				.build();
 	}
 }
