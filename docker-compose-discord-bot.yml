@@ -5,8 +5,10 @@ services:
     discord_bot:
         container_name: discord_bot
         image: taltechanalytics/discord-bot:latest
+        network_mode: "host"
         environment:
             DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
             DATABASE_PASSWORD: ${DATABASE_PASSWORD:-v1jXKUpcHAm0dc3C2GNlFkjibEwzdkTbG0Vnld5RZ16Nriz86hQ0cQ2dC09lpVjg}
+            DATABASE_URL: ${DATABASE_URL:-jdbc:postgresql://localhost:5433/discord}
         ports:
             - 8070:8070
