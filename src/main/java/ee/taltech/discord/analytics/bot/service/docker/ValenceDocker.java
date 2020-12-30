@@ -32,7 +32,7 @@ public class ValenceDocker extends Docker {
 		Volume outputVolume = new Volume("/analyzer/valence-output");
 
 		long curTime = System.currentTimeMillis();
-		tmpFolder = "valence/" + curTime;
+		tmpFolder = System.getProperty("DISCORD_BOT_HOME", "data/") + "valence/" + curTime;
 		String inputFolder = String.format("%s/input", tmpFolder);
 		String outputFolder = String.format("%s/output", tmpFolder);
 

@@ -32,7 +32,7 @@ public class AggregatorDocker extends Docker {
 		Volume outputVolume = new Volume("/analyzer/output");
 
 		long curTime = System.currentTimeMillis();
-		tmpFolder = "aggregator/" + curTime;
+		tmpFolder = System.getProperty("DISCORD_BOT_HOME", "data/") + "aggregator/" + curTime;
 		String inputFolder = String.format("%s/input", tmpFolder);
 		String outputFolder = String.format("%s/output", tmpFolder);
 
