@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 @Setter
 public class ApplicationProperties {
 
+	private String home;
 	private String token;
 	private Boolean inProgress = false;
 

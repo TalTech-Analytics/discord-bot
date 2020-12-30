@@ -1,5 +1,6 @@
 package ee.taltech.discord.analytics.bot.service.update;
 
+import ee.taltech.discord.analytics.bot.configuration.ApplicationProperties;
 import ee.taltech.discord.analytics.bot.model.dto.*;
 import ee.taltech.discord.analytics.bot.repository.ChannelRepository;
 import ee.taltech.discord.analytics.bot.repository.GuildRepository;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AggregationService {
 
+	private final ApplicationProperties applicationProperties;
 	private final GuildRepository guildRepository;
 	private final ChannelRepository channelRepository;
 	private final MessageRepository messageRepository;
@@ -29,6 +31,7 @@ public class AggregationService {
 			runDocker();
 		} catch (Exception e) {
 			logger.error("Running aggregator container resulted in an error: {}", e.getMessage());
+			throw e;
 		}
 
 		logger.info("Finished running discord data aggregator");
@@ -36,6 +39,7 @@ public class AggregationService {
 
 	private void runDocker() {
 		dockerRunningService.runDocker(AggregatorDocker.builder()
+				.home(applicationProperties.getHome())
 				.guilds(new GuildContainerDTO(guildRepository.findAll()
 						.stream().map(GuildDTO::from).collect(Collectors.toList())))
 				.channels(new ChannelContainerDTO(channelRepository.findAll()

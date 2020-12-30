@@ -18,6 +18,7 @@ import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 @Builder
 public class AggregatorDocker extends Docker {
 
+	private final String home;
 	private final GuildContainerDTO guilds;
 	private final ChannelContainerDTO channels;
 	private final MessageContainerDTO messages;
@@ -32,7 +33,7 @@ public class AggregatorDocker extends Docker {
 		Volume outputVolume = new Volume("/analyzer/output");
 
 		long curTime = System.currentTimeMillis();
-		tmpFolder = System.getProperty("DISCORD_BOT_HOME", "data/") + "aggregator/" + curTime;
+		tmpFolder = home + "aggregator/" + curTime;
 		String inputFolder = String.format("%s/input", tmpFolder);
 		String outputFolder = String.format("%s/output", tmpFolder);
 

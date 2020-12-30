@@ -16,10 +16,12 @@ import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 public class ValenceDocker extends Docker {
 
 	private final MessageContainerDTO valenceInput;
+	private final String home;
 	private MessageContainerDTO valenceOutput;
 
-	public ValenceDocker(MessageContainerDTO messageContainerDTO) {
+	public ValenceDocker(MessageContainerDTO messageContainerDTO, String home) {
 		this.valenceInput = messageContainerDTO;
+		this.home = home;
 	}
 
 	@Override
@@ -32,7 +34,7 @@ public class ValenceDocker extends Docker {
 		Volume outputVolume = new Volume("/analyzer/valence-output");
 
 		long curTime = System.currentTimeMillis();
-		tmpFolder = System.getProperty("DISCORD_BOT_HOME", "data/") + "valence/" + curTime;
+		tmpFolder = home + "valence/" + curTime;
 		String inputFolder = String.format("%s/input", tmpFolder);
 		String outputFolder = String.format("%s/output", tmpFolder);
 

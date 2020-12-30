@@ -1,5 +1,6 @@
 package ee.taltech.discord.analytics.bot.service.update;
 
+import ee.taltech.discord.analytics.bot.configuration.ApplicationProperties;
 import ee.taltech.discord.analytics.bot.model.dto.MessageContainerDTO;
 import ee.taltech.discord.analytics.bot.model.dto.MessageDTO;
 import ee.taltech.discord.analytics.bot.model.entity.MessageEntity;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ValenceService {
 
+	private final ApplicationProperties applicationProperties;
 	private final DockerRunningService dockerRunningService;
 	private final MessageRepository messageRepository;
 	private final Logger logger;
@@ -27,6 +29,7 @@ public class ValenceService {
 			runDocker();
 		} catch (Exception e) {
 			logger.error("Running valence container resulted in an error: {}", e.getMessage());
+			throw e;
 		}
 
 		logger.info("Finished running valence tagger");
@@ -39,7 +42,7 @@ public class ValenceService {
 				.peek(x -> entities.put(x.getId(), x))
 				.map(MessageDTO::from).collect(Collectors.toList()));
 
-		Object result = dockerRunningService.runDocker(new ValenceDocker(container));
+		Object result = dockerRunningService.runDocker(new ValenceDocker(container, applicationProperties.getHome()));
 
 		if (result instanceof MessageContainerDTO) {
 			((MessageContainerDTO) result).getMessages().forEach(x -> {
